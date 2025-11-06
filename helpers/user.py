@@ -15,17 +15,30 @@ class UserAPIHelper(CommonApiHelper):
         )
 
     @allure.step("Отправка запроса для входа пользователя в систему")
-    def send_request_login(self, data):
-        return requests.request(
-            url=UserData.USER_LOGIN_URL[0], method=UserData.USER_LOGIN_URL[1], json=data
-        )
+    def send_request_login(
+        self,
+        user_data,
+    ):
+
+        url = UserData.USER_LOGIN_URL[0]
+        method = UserData.USER_LOGIN_URL[1]
+
+        json_data = {"email": user_data["email"], "password": user_data["password"]}
+        return requests.request(url=url, method=method, json=json_data)
 
     @allure.step("Получение данных нового тестового пользователя")
     def data_random_new_user_account(self, keys=None):
-        data = self.generate_user_create_data(keys=keys)
-        response = self.send_request_create(data)
-        if response.status_code == 201:
-            return data
+        user_data = self.generate_user_create_data(keys=keys)
+        response = self.send_request_create(user_data)
+        if response.status_code == 200:
+            return user_data
+
+    @allure.step("Получение Headers тестового пользователя")
+    def get_headers_auth_user(self):
+        data = self.data_random_new_user_account()
+        response = self.send_request_login(data)
+        headers = {"Authorization": response.json().get("accessToken")}
+        return headers
 
     @allure.step("Создание тестовых данных пользователя")
     def generate_user_create_data(self, keys=None):

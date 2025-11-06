@@ -6,7 +6,7 @@ from helpers.user import UserAPIHelper
 
 
 class TestUserCreate:
-    @allure.title("Проверка успешное создание пользователя")
+    @allure.title("Проверка успешное создание уникального пользователя")
     def test_user_create_account_shows_ok_true_200(self):
         user_api = UserAPIHelper()
         data = user_api.generate_user_create_data(keys=["name", "email", "password"])
@@ -14,7 +14,7 @@ class TestUserCreate:
         assert response.status_code == 200
         assert response.json().get("success")
 
-    @allure.title("Проверка нельзя создать двух одинаковых пользователей ")
+    @allure.title("Проверка нельзя создать пользователя который уже зарегистрировался ")
     def test_user_create_account_shows_ok_false_403(self):
         user_api = UserAPIHelper()
         data = user_api.generate_user_create_data(keys=["name", "email", "password"])
@@ -43,9 +43,14 @@ class TestUserCreate:
                 ["email", "name"],
                 id="without_password",
             ),
+            pytest.param(
+                "Проверка если имени нет - запрос возвращает ошибку",
+                ["email", "password"],
+                id="without_name",
+            ),
         ],
     )
-    @allure.title("{test_case}")
+    @allure.title("Проверка наличия обязательных полей {test_case}")
     def test_user_create_account_missing_fields_shows_error_403(self, test_case, keys):
         user_api = UserAPIHelper()
 
