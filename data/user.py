@@ -3,7 +3,6 @@ from data.common import CommonUrls
 
 class UserUrls:
     USER_CREATE_URL = (f"{CommonUrls.MAIN_API_URL}/auth/register", "POST")
-    # email pass name
 
     USER_CREATE_ALREADY_EXISTS_ERROR_403 = {
         "success": False,
