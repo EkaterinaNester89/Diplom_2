@@ -1,22 +1,25 @@
 import allure
 import requests
 
-from data.user import UserUrls
-from helpers.common import CommonApiHelper
+from data.user import UserData
+from .common import CommonApiHelper
 
 
 class UserAPIHelper(CommonApiHelper):
     @allure.step("Отправка запроса для регистрирования пользователя в системе")
     def send_request_create(self, data):
-        return requests.request(url=UserUrls.USER_CREATE_URL[0],
-                                method=UserUrls.USER_CREATE_URL[1],
-                                json=data)
+        return requests.request(
+            url=UserData.USER_CREATE_URL[0],
+            method=UserData.USER_CREATE_URL[1],
+            json=data,
+        )
 
     @allure.step("Отправка запроса для входа пользователя в систему")
     def send_request_login(self, data):
-        return requests.request(url=UserUrls.USER_LOGIN_URL[0],
-                                method=UserUrls.USER_LOGIN_URL[1],
-                                json=data)
+        return requests.request(
+            url=UserData.USER_LOGIN_URL[0], method=UserData.USER_LOGIN_URL[1], json=data
+        )
+
     @allure.step("Получение данных нового тестового пользователя")
     def data_random_new_user_account(self, keys=None):
         data = self.generate_user_create_data(keys=keys)

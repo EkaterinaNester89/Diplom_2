@@ -1,7 +1,7 @@
 from data.common import CommonUrls
 
 
-class UserUrls:
+class UserData:
     USER_CREATE_URL = (f"{CommonUrls.MAIN_API_URL}/auth/register", "POST")
 
     USER_CREATE_ALREADY_EXISTS_ERROR_403 = {
